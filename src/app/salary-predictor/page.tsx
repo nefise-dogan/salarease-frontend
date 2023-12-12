@@ -2,8 +2,9 @@
 "use client";
 
 import { useState } from "react";
-import { Select, SelectItem, Input, Button } from "@nextui-org/react";
+import { Select, SelectItem, Input, Button, Slider } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
+import { calculateSalary } from "../../utils/calculate-salary";
 
 enum Profile {
     JobSeeker = "jobSeeker",
@@ -42,7 +43,7 @@ const countries = [
     { key: "ger", value: "Germany" },
 ];
 
-const education = [
+const educationLevels = [
     { key: "ba", value: "Bachelor's Degree" },
     { key: "ma", value: "Master's Degree" },
     { key: "phd", value: "PhD" },
@@ -54,6 +55,29 @@ function SalaryPredictor() {
     const [selectedProfile, setSelectedProfile] = useState<Profile>(
         Profile.JobSeeker,
     );
+
+    // Form inputs
+    const [title, setTitle] = useState("");
+    const [experience, setExperience] = useState(0);
+    const [gender, setGender] = useState("other");
+    const [country, setCountry] = useState("");
+    const [education, setEducation] = useState("");
+
+    // Form output
+    const [calculatedSalary, setCalculatedSalary] = useState([50000, 60000]);
+
+    async function handleSubmit() {
+        const salary = await calculateSalary({
+            title,
+            experience,
+            gender,
+            country,
+            education,
+        });
+
+        setCalculatedSalary(salary);
+        setStepIndex(2);
+    }
 
     function selectProfile(profile: Profile) {
         setSelectedProfile(profile);
@@ -112,11 +136,6 @@ function SalaryPredictor() {
 
         const prefix = selectedProfile === Profile.JobSeeker ? "your" : "the";
 
-        const salaryLabel =
-            selectedProfile === Profile.JobSeeker
-                ? "Expected Yearly Salary Range"
-                : "Expected Yearly Salary Budget";
-
         return (
             <>
                 <h1 className="self-center text-center text-4xl font-extralight leading-snug text-black ">
@@ -129,6 +148,9 @@ function SalaryPredictor() {
                         placeholder={`Select ${prefix} title`}
                         className="max-w-xs text-black"
                         size="lg"
+                        onSelectionChange={(keys) =>
+                            setTitle(Object.entries(keys)[0][1])
+                        }
                     >
                         {titles.map((title) => (
                             <SelectItem
@@ -148,6 +170,9 @@ function SalaryPredictor() {
                         min={0}
                         max={50}
                         size="lg"
+                        onValueChange={(value) =>
+                            setExperience(parseInt(value, 10))
+                        }
                     />
                     <Select
                         color="secondary"
@@ -155,6 +180,9 @@ function SalaryPredictor() {
                         placeholder={`Select ${prefix} gender`}
                         className="max-w-xs text-black"
                         size="lg"
+                        onSelectionChange={(keys) =>
+                            setGender(Object.entries(keys)[0][1])
+                        }
                     >
                         {genders.map((gender) => (
                             <SelectItem
@@ -172,6 +200,9 @@ function SalaryPredictor() {
                         label="Country"
                         placeholder="Select the country"
                         size="lg"
+                        onSelectionChange={(keys) =>
+                            setCountry(Object.entries(keys)[0][1])
+                        }
                     >
                         {countries.map((country) => (
                             <SelectItem
@@ -189,8 +220,11 @@ function SalaryPredictor() {
                         label="Education Level"
                         placeholder={`Select ${prefix} education level`}
                         size="lg"
+                        onSelectionChange={(keys) =>
+                            setEducation(Object.entries(keys)[0][1])
+                        }
                     >
-                        {education.map((level) => (
+                        {educationLevels.map((level) => (
                             <SelectItem
                                 key={level.key}
                                 value={level.key}
@@ -200,7 +234,12 @@ function SalaryPredictor() {
                             </SelectItem>
                         ))}
                     </Select>
-                    <Button color="secondary" variant="flat" size="lg">
+                    <Button
+                        color="secondary"
+                        variant="flat"
+                        size="lg"
+                        onClick={handleSubmit}
+                    >
                         Submit
                     </Button>
                 </div>
@@ -209,10 +248,62 @@ function SalaryPredictor() {
     }
 
     function renderStep2() {
+        const from = calculatedSalary[0];
+        const to = calculatedSalary[1];
+
+        const min = 10000;
+        const max = 400000;
+
         return (
             <>
-                <h1>Salary Predictor</h1>
-                <p>Coming soon...</p>
+                <h1 className="self-center text-center text-4xl font-extralight leading-snug text-black ">
+                    This is the expected salary:
+                </h1>
+                <p className="mt-12 text-3xl">
+                    {from}$ - {to}$
+                </p>
+                <Slider
+                    step={100}
+                    minValue={min}
+                    maxValue={max}
+                    defaultValue={calculatedSalary}
+                    showSteps={true}
+                    formatOptions={{ style: "currency", currency: "USD" }}
+                    isDisabled
+                    tooltipValueFormatOptions={{
+                        style: "currency",
+                        currency: "USD",
+                        maximumFractionDigits: 0,
+                    }}
+                    classNames={{
+                        base: "max-w-md mt-12",
+                        filler: "bg-gradient-to-r from-primary-500 to-secondary-400",
+                        labelWrapper: "mb-2",
+                        label: "font-medium text-default-700 text-medium",
+                        value: "font-medium text-default-500 text-small",
+                        thumb: [
+                            "transition-size",
+                            "bg-gradient-to-r from-secondary-400 to-primary-500",
+                            "data-[dragging=true]:shadow-lg data-[dragging=true]:shadow-black/20",
+                            "data-[dragging=true]:w-7 data-[dragging=true]:h-7 data-[dragging=true]:after:h-6 data-[dragging=true]:after:w-6",
+                        ],
+                        step: "data-[in-range=true]:bg-black/30 dark:data-[in-range=true]:bg-white/50",
+                    }}
+                    tooltipProps={{
+                        offset: 10,
+                        placement: "bottom",
+                        classNames: {
+                            base: [
+                                // arrow color
+                                "before:bg-gradient-to-r before:from-secondary-400 before:to-primary-500",
+                            ],
+                            content: [
+                                "py-2 shadow-xl",
+                                "text-white bg-gradient-to-r from-secondary-400 to-primary-500",
+                            ],
+                        },
+                    }}
+                />
             </>
         );
     }
