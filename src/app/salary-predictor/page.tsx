@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 "use client";
 
-import { useState } from "react";
-import { Select, SelectItem, Input, Button, Slider } from "@nextui-org/react";
-import { Image } from "@nextui-org/react";
+import { useEffect, useState } from "react";
+import { Select, SelectItem, Input, Button, Slider, Image } from "@nextui-org/react";
 import { calculateSalary } from "../../utils/calculate-salary";
 
 enum Profile {
@@ -56,27 +55,54 @@ function SalaryPredictor() {
         Profile.JobSeeker,
     );
 
+    const [loading, setLoading] = useState(false);
+
     // Form inputs
-    const [title, setTitle] = useState("");
-    const [experience, setExperience] = useState(0);
-    const [gender, setGender] = useState("other");
-    const [country, setCountry] = useState("");
-    const [education, setEducation] = useState("");
+    const [title, setTitle] = useState<string | undefined>("");
+    const [experience, setExperience] = useState<number | undefined>(0);
+    const [gender, setGender] = useState<string | undefined>("");
+    const [country, setCountry] = useState<string | undefined>("");
+    const [education, setEducation] = useState<string | undefined>("");
 
     // Form output
     const [calculatedSalary, setCalculatedSalary] = useState([50000, 60000]);
 
     async function handleSubmit() {
-        const salary = await calculateSalary({
-            title,
-            experience,
-            gender,
-            country,
-            education,
-        });
+        if (!title || experience === undefined || !gender || !country || !education) {
+            if (!title) {
+                setTitle(undefined);
+            }
 
-        setCalculatedSalary(salary);
-        setStepIndex(2);
+            if (!gender) {
+                setGender(undefined);
+            }
+
+            if (!country) {
+                setCountry(undefined);
+            }
+
+            if (!education) {
+                setEducation(undefined);
+            }
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const salary = await calculateSalary({
+                title,
+                experience,
+                gender,
+                country,
+                education
+            });
+
+            setCalculatedSalary(salary);
+            setStepIndex(2);
+        } catch(error) {}
+
+        setLoading(false);
     }
 
     function selectProfile(profile: Profile) {
@@ -114,7 +140,7 @@ function SalaryPredictor() {
                         <Image
                             className="mt-10 rounded-small"
                             src="./hiring.jpeg"
-                            alt="Job Seeker"
+                            alt="Hiring"
                             width={400}
                             height={400}
                             isBlurred
@@ -129,119 +155,160 @@ function SalaryPredictor() {
     }
 
     function renderStep1() {
-        const title =
+        const pageTitle =
             selectedProfile === Profile.JobSeeker
                 ? "Fill out your details"
                 : "Fill out the position details";
 
         const prefix = selectedProfile === Profile.JobSeeker ? "your" : "the";
 
+        const image = selectedProfile === Profile.JobSeeker ? "job-seeker-2" : "hiring-2";
+
+        const minExperience = 0;
+        const maxExperience = 50;
+
         return (
             <>
                 <h1 className="self-center text-center text-4xl font-extralight leading-snug text-black ">
-                    {title}
+                    {pageTitle}
                 </h1>
-                <div className="mt-12 flex w-full max-w-4xl flex-col gap-6">
-                    <Select
-                        color="secondary"
-                        label="Title"
-                        placeholder={`Select ${prefix} title`}
-                        className="max-w-xs text-black"
-                        size="lg"
-                        onSelectionChange={(keys) =>
-                            setTitle(Object.entries(keys)[0][1])
-                        }
-                    >
-                        {titles.map((title) => (
-                            <SelectItem
-                                key={title.key}
-                                value={title.key}
-                                className="text-black"
-                            >
-                                {title.value}
-                            </SelectItem>
-                        ))}
-                    </Select>
-                    <Input
-                        color="secondary"
-                        type="number"
-                        label="Years of experience"
-                        className="text-black"
-                        min={0}
-                        max={50}
-                        size="lg"
-                        onValueChange={(value) =>
-                            setExperience(parseInt(value, 10))
-                        }
-                    />
-                    <Select
-                        color="secondary"
-                        label="Gender"
-                        placeholder={`Select ${prefix} gender`}
-                        className="max-w-xs text-black"
-                        size="lg"
-                        onSelectionChange={(keys) =>
-                            setGender(Object.entries(keys)[0][1])
-                        }
-                    >
-                        {genders.map((gender) => (
-                            <SelectItem
-                                key={gender.key}
-                                value={gender.key}
-                                className="text-black"
-                            >
-                                {gender.value}
-                            </SelectItem>
-                        ))}
-                    </Select>
-                    <Select
-                        className="max-w-xs text-black"
-                        color="secondary"
-                        label="Country"
-                        placeholder="Select the country"
-                        size="lg"
-                        onSelectionChange={(keys) =>
-                            setCountry(Object.entries(keys)[0][1])
-                        }
-                    >
-                        {countries.map((country) => (
-                            <SelectItem
-                                key={country.key}
-                                value={country.key}
-                                className="text-black"
-                            >
-                                {country.value}
-                            </SelectItem>
-                        ))}
-                    </Select>
-                    <Select
-                        className="max-w-xs text-black"
-                        color="secondary"
-                        label="Education Level"
-                        placeholder={`Select ${prefix} education level`}
-                        size="lg"
-                        onSelectionChange={(keys) =>
-                            setEducation(Object.entries(keys)[0][1])
-                        }
-                    >
-                        {educationLevels.map((level) => (
-                            <SelectItem
-                                key={level.key}
-                                value={level.key}
-                                className="text-black"
-                            >
-                                {level.value}
-                            </SelectItem>
-                        ))}
-                    </Select>
-                    <Button
-                        color="secondary"
-                        variant="flat"
-                        size="lg"
-                        onClick={handleSubmit}
-                    >
-                        Submit
-                    </Button>
+                <div className="mt-12 flex gap-24 justify-center">
+                    <div>
+                        <Image
+                            className="rounded-small"
+                            src={`./${image}.png`}
+                            alt="Hiring"
+                            width={320}
+                            isBlurred
+                        />
+                    </div>
+                    <div className="flex flex-col gap-6 flex-1 w-[320px]">
+                        <Select
+                            color="secondary"
+                            label="Title"
+                            placeholder={`Select ${prefix} title`}
+                            className="max-w-xs text-black"
+                            size="lg"
+                            isInvalid={title === undefined}
+                            isRequired
+                            onSelectionChange={(keys) =>
+                                setTitle(Object.entries(keys)[0][1])
+                            }
+                        >
+                            {titles.map((title) => (
+                                <SelectItem
+                                    key={title.key}
+                                    value={title.key}
+                                    className="text-black"
+                                >
+                                    {title.value}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                        <Input
+                            color="secondary"
+                            type="number"
+                            label="Years of experience"
+                            className="text-black"
+                            min={minExperience}
+                            max={maxExperience}
+                            size="lg"
+                            value={experience?.toString()}
+                            isInvalid={experience === undefined}
+                            isRequired
+                            onValueChange={(value) => {
+                                if (value === "") {
+                                    setExperience(undefined);
+                                    return;
+                                }
+
+                                const intValue = parseInt(value, 10);
+                                const clampedValue = Math.min(Math.max(0, intValue), 50);
+
+                                if (clampedValue === 0) {
+                                    setExperience(undefined);
+                                    return;
+                                }
+
+                                setExperience(clampedValue);
+                            }}
+                        />
+                        <Select
+                            color="secondary"
+                            label="Gender"
+                            placeholder={`Select ${prefix} gender`}
+                            className="max-w-xs text-black"
+                            size="lg"
+                            isInvalid={gender === undefined}
+                            isRequired
+                            onSelectionChange={(keys) =>
+                                setGender(Object.entries(keys)[0][1])
+                            }
+                        >
+                            {genders.map((gender) => (
+                                <SelectItem
+                                    key={gender.key}
+                                    value={gender.key}
+                                    className="text-black"
+                                >
+                                    {gender.value}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                        <Select
+                            className="max-w-xs text-black"
+                            color="secondary"
+                            label="Country"
+                            placeholder="Select the country"
+                            size="lg"
+                            isInvalid={country === undefined}
+                            isRequired
+                            onSelectionChange={(keys) =>
+                                setCountry(Object.entries(keys)[0][1])
+                            }
+                        >
+                            {countries.map((country) => (
+                                <SelectItem
+                                    key={country.key}
+                                    value={country.key}
+                                    className="text-black"
+                                >
+                                    {country.value}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                        <Select
+                            className="max-w-xs text-black"
+                            color="secondary"
+                            label="Education Level"
+                            placeholder={`Select ${prefix} education level`}
+                            size="lg"
+                            isInvalid={education === undefined}
+                            isRequired
+                            onSelectionChange={(keys) =>
+                                setEducation(Object.entries(keys)[0][1])
+                            }
+                        >
+                            {educationLevels.map((level) => (
+                                <SelectItem
+                                    key={level.key}
+                                    value={level.key}
+                                    className="text-black"
+                                >
+                                    {level.value}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                        <Button
+                            color="secondary"
+                            variant="flat"
+                            size="lg"
+                            isLoading={loading}
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </Button>
+                    </div>
                 </div>
             </>
         );
