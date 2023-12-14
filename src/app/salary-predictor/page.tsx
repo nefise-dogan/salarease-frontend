@@ -179,13 +179,6 @@ function SalaryPredictor() {
         const country_idx = COUNTRIES.indexOf(country);
         const education_idx = EDUCATION_LEVELS.indexOf(education);
 
-        console.log({
-            title_idx,
-            gender_idx,
-            country_idx,
-            education_idx,
-        });
-
         try {
             const salary = await calculateSalary({
                 title_idx,
@@ -425,53 +418,81 @@ function SalaryPredictor() {
         return (
             <>
                 <h1 className="self-center text-center text-4xl font-extralight leading-snug text-black ">
-                    This is the expected salary:
+                    Your results:
                 </h1>
-                <p className="mt-12 text-3xl">
-                    {from}$ - {to}$
-                </p>
-                <Slider
-                    step={100}
-                    minValue={min}
-                    maxValue={max}
-                    defaultValue={calculatedSalary}
-                    showSteps={true}
-                    formatOptions={{ style: "currency", currency: "USD" }}
-                    isDisabled
-                    tooltipValueFormatOptions={{
-                        style: "currency",
-                        currency: "USD",
-                        maximumFractionDigits: 0,
-                    }}
-                    classNames={{
-                        base: "max-w-md mt-12",
-                        filler: "bg-gradient-to-r from-primary-500 to-secondary-400",
-                        labelWrapper: "mb-2",
-                        label: "font-medium text-default-700 text-medium",
-                        value: "font-medium text-default-500 text-small",
-                        thumb: [
-                            "transition-size",
-                            "bg-gradient-to-r from-secondary-400 to-primary-500",
-                            "data-[dragging=true]:shadow-lg data-[dragging=true]:shadow-black/20",
-                            "data-[dragging=true]:w-7 data-[dragging=true]:h-7 data-[dragging=true]:after:h-6 data-[dragging=true]:after:w-6",
-                        ],
-                        step: "data-[in-range=true]:bg-black/30 dark:data-[in-range=true]:bg-white/50",
-                    }}
-                    tooltipProps={{
-                        offset: 10,
-                        placement: "bottom",
-                        classNames: {
-                            base: [
-                                // arrow color
-                                "before:bg-gradient-to-r before:from-secondary-400 before:to-primary-500",
-                            ],
-                            content: [
-                                "py-2 shadow-xl",
-                                "text-white bg-gradient-to-r from-secondary-400 to-primary-500",
-                            ],
-                        },
-                    }}
-                />
+                <div className="mt-12 flex justify-center gap-24">
+                    <div>
+                        <Image
+                            className="rounded-small"
+                            src="./result-analytics.png"
+                            alt="result"
+                            width={320}
+                            isBlurred
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <div>
+                            <h1 className="text-center text-3xl font-extralight leading-snug text-black">
+                                Salary range:
+                            </h1>
+                            <p className="mt-8 text-3xl">
+                                {from}$ - {to}$
+                            </p>
+                            <Slider
+                                step={100}
+                                minValue={min}
+                                maxValue={max}
+                                defaultValue={calculatedSalary}
+                                showSteps={true}
+                                formatOptions={{
+                                    style: "currency",
+                                    currency: "USD",
+                                }}
+                                isDisabled
+                                tooltipValueFormatOptions={{
+                                    style: "currency",
+                                    currency: "USD",
+                                    maximumFractionDigits: 0,
+                                }}
+                                classNames={{
+                                    base: "max-w-md mt-8",
+                                    filler: "bg-gradient-to-r from-primary-500 to-secondary-400",
+                                    labelWrapper: "mb-2",
+                                    label: "font-medium text-default-700 text-medium",
+                                    value: "font-medium text-default-500 text-small",
+                                    thumb: [
+                                        "transition-size",
+                                        "bg-gradient-to-r from-secondary-400 to-primary-500",
+                                        "data-[dragging=true]:shadow-lg data-[dragging=true]:shadow-black/20",
+                                        "data-[dragging=true]:w-7 data-[dragging=true]:h-7 data-[dragging=true]:after:h-6 data-[dragging=true]:after:w-6",
+                                    ],
+                                    step: "data-[in-range=true]:bg-black/30 dark:data-[in-range=true]:bg-white/50",
+                                }}
+                                tooltipProps={{
+                                    offset: 10,
+                                    placement: "bottom",
+                                    classNames: {
+                                        base: [
+                                            // arrow color
+                                            "before:bg-gradient-to-r before:from-secondary-400 before:to-primary-500",
+                                        ],
+                                        content: [
+                                            "py-2 shadow-xl",
+                                            "text-white bg-gradient-to-r from-secondary-400 to-primary-500",
+                                        ],
+                                    },
+                                }}
+                            />
+                        </div>
+                        <ol className="mt-12 rounded-lg p-6 shadow-lg">
+                            <li className="font-light">•<strong>Title:</strong> {title}</li>
+                            <li className="font-light mt-6">•<strong>Experience:</strong> {experience} years</li>
+                            <li className="font-light mt-6">•<strong>Gender:</strong> {gender}</li>
+                            <li className="font-light mt-6">•<strong>Country:</strong> {country}</li>
+                            <li className="font-light mt-6">•<strong>Education Level:</strong> {education}</li>
+                        </ol>
+                    </div>
+                </div>
             </>
         );
     }
