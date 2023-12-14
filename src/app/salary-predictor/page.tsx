@@ -2,7 +2,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Select, SelectItem, Input, Button, Slider, Image } from "@nextui-org/react";
+import {
+    Select,
+    SelectItem,
+    Input,
+    Button,
+    Slider,
+    Image,
+} from "@nextui-org/react";
 import { calculateSalary } from "../../utils/calculate-salary";
 
 enum Profile {
@@ -10,44 +17,116 @@ enum Profile {
     Hiring = "hiring",
 }
 
-const titles = [
-    { key: "swe", value: "Software Engineer" },
-    { key: "ds", value: "Data Scientist" },
-    { key: "pm", value: "Product Manager" },
-    { key: "ux", value: "UX Designer" },
-    { key: "ui", value: "UI Designer" },
-    { key: "be", value: "Backend Developer" },
-    { key: "fe", value: "Frontend Developer" },
-    { key: "fs", value: "Full Stack Developer" },
-    { key: "md", value: "Mobile Developer" },
-    { key: "do", value: "DevOps Engineer" },
-    { key: "qa", value: "QA Engineer" },
-    { key: "de", value: "Data Engineer" },
-    { key: "da", value: "Data Analyst" },
-    { key: "ba", value: "Business Analyst" },
-    { key: "sm", value: "Sales Manager" },
-    { key: "sr", value: "Sales Representative" },
+const TITLES = [
+    "Product Manager",
+    "Software Engineer",
+    "Software Engineering Manager",
+    "Data Scientist",
+    "Solution Architect",
+    "Technical Program Manager",
+    "Human Resources",
+    "Product Designer",
+    "Marketing",
+    "Business Analyst",
+    "Hardware Engineer",
+    "Sales",
+    "Recruiter",
+    "Mechanical Engineer",
+    "Management Consultant",
 ];
 
-const genders = [
-    { key: "male", value: "Male" },
-    { key: "female", value: "Female" },
-    { key: "other", value: "Other" },
+const COUNTRIES = [
+    "USA",
+    "United Kingdom",
+    "Ireland",
+    "India",
+    "Belarus",
+    "Canada",
+    "Russia",
+    "Netherlands",
+    "Switzerland",
+    "Singapore",
+    "Germany",
+    "Japan",
+    "Sweden",
+    "Australia",
+    "United States",
+    "Israel",
+    "Poland",
+    "China",
+    "Austria",
+    "Luxembourg",
+    "Czech Republic",
+    "France",
+    "Pakistan",
+    "New Zealand",
+    "Denmark",
+    "Hong Kong (SAR)",
+    "South Africa",
+    "Spain",
+    "United Arab Emirates",
+    "Hungary",
+    "Brazil",
+    "Bulgaria",
+    "Philippines",
+    "Indonesia",
+    "Puerto Rico",
+    "Taiwan",
+    "Romania",
+    "Mexico",
+    "Costa Rica",
+    "Marshall Islands",
+    "Vietnam",
+    "Panama",
+    "Argentina",
+    "Norway",
+    "Moldova",
+    "Estonia",
+    "Kenya",
+    "Turkey",
+    "Italy",
+    "Lithuania",
+    "Nigeria",
+    "Korea",
+    "Ukraine",
+    "Jordan",
+    "Thailand",
+    "Colombia",
+    "Serbia",
+    "Portugal",
+    "Guatemala",
+    "Yugoslavia",
+    "Uruguay",
+    "Slovakia",
+    "Bangladesh",
+    "Finland",
+    "Chile",
+    "Malaysia",
+    "Latvia",
+    "Saudi Arabia",
+    "Peru",
+    "Netherlands Antilles",
+    "Belgium",
+    "Burma",
+    "Qatar",
+    "Ghana",
+    "Kazakhstan",
+    "Uzbekistan",
+    "Armenia",
+    "Morocco",
+    "Iraq",
+    "Trinidad and Tobago",
+    "Egypt",
 ];
 
-const countries = [
-    { key: "us", value: "United States" },
-    { key: "tr", value: "Turkey" },
-    { key: "uk", value: "United Kingdom" },
-    { key: "ger", value: "Germany" },
+const EDUCATION_LEVELS = [
+    "Bachelor",
+    "Doctorate",
+    "Master",
+    "Both Master&Doctorate",
 ];
 
-const educationLevels = [
-    { key: "ba", value: "Bachelor's Degree" },
-    { key: "ma", value: "Master's Degree" },
-    { key: "phd", value: "PhD" },
-    { key: "ma-phd", value: "Master's Degree + PHD" },
-];
+const GENDERS = ["Male", "Female", "Other"];
 
 function SalaryPredictor() {
     const [stepIndex, setStepIndex] = useState(0);
@@ -68,7 +147,13 @@ function SalaryPredictor() {
     const [calculatedSalary, setCalculatedSalary] = useState([50000, 60000]);
 
     async function handleSubmit() {
-        if (!title || experience === undefined || !gender || !country || !education) {
+        if (
+            !title ||
+            experience === undefined ||
+            !gender ||
+            !country ||
+            !education
+        ) {
             if (!title) {
                 setTitle(undefined);
             }
@@ -89,18 +174,30 @@ function SalaryPredictor() {
 
         setLoading(true);
 
+        const title_idx = TITLES.indexOf(title);
+        const gender_idx = GENDERS.indexOf(gender);
+        const country_idx = COUNTRIES.indexOf(country);
+        const education_idx = EDUCATION_LEVELS.indexOf(education);
+
+        console.log({
+            title_idx,
+            gender_idx,
+            country_idx,
+            education_idx,
+        });
+
         try {
             const salary = await calculateSalary({
-                title,
+                title_idx,
                 experience,
-                gender,
-                country,
-                education
+                gender_idx,
+                country_idx,
+                education_idx,
             });
 
             setCalculatedSalary(salary);
             setStepIndex(2);
-        } catch(error) {}
+        } catch (error) {}
 
         setLoading(false);
     }
@@ -162,7 +259,8 @@ function SalaryPredictor() {
 
         const prefix = selectedProfile === Profile.JobSeeker ? "your" : "the";
 
-        const image = selectedProfile === Profile.JobSeeker ? "job-seeker-2" : "hiring-2";
+        const image =
+            selectedProfile === Profile.JobSeeker ? "job-seeker-2" : "hiring-2";
 
         const minExperience = 0;
         const maxExperience = 50;
@@ -172,7 +270,7 @@ function SalaryPredictor() {
                 <h1 className="self-center text-center text-4xl font-extralight leading-snug text-black ">
                     {pageTitle}
                 </h1>
-                <div className="mt-12 flex gap-24 justify-center">
+                <div className="mt-12 flex justify-center gap-24">
                     <div>
                         <Image
                             className="rounded-small"
@@ -182,7 +280,7 @@ function SalaryPredictor() {
                             isBlurred
                         />
                     </div>
-                    <div className="flex flex-col gap-6 flex-1 w-[320px]">
+                    <div className="flex w-[320px] flex-1 flex-col gap-6">
                         <Select
                             color="secondary"
                             label="Title"
@@ -195,13 +293,13 @@ function SalaryPredictor() {
                                 setTitle(Object.entries(keys)[0][1])
                             }
                         >
-                            {titles.map((title) => (
+                            {TITLES.map((title) => (
                                 <SelectItem
-                                    key={title.key}
-                                    value={title.key}
+                                    key={title}
+                                    value={title}
                                     className="text-black"
                                 >
-                                    {title.value}
+                                    {title}
                                 </SelectItem>
                             ))}
                         </Select>
@@ -223,7 +321,10 @@ function SalaryPredictor() {
                                 }
 
                                 const intValue = parseInt(value, 10);
-                                const clampedValue = Math.min(Math.max(0, intValue), 50);
+                                const clampedValue = Math.min(
+                                    Math.max(0, intValue),
+                                    50,
+                                );
 
                                 if (clampedValue === 0) {
                                     setExperience(undefined);
@@ -245,13 +346,13 @@ function SalaryPredictor() {
                                 setGender(Object.entries(keys)[0][1])
                             }
                         >
-                            {genders.map((gender) => (
+                            {GENDERS.map((gender) => (
                                 <SelectItem
-                                    key={gender.key}
-                                    value={gender.key}
+                                    key={gender}
+                                    value={gender}
                                     className="text-black"
                                 >
-                                    {gender.value}
+                                    {gender}
                                 </SelectItem>
                             ))}
                         </Select>
@@ -267,13 +368,13 @@ function SalaryPredictor() {
                                 setCountry(Object.entries(keys)[0][1])
                             }
                         >
-                            {countries.map((country) => (
+                            {COUNTRIES.map((country) => (
                                 <SelectItem
-                                    key={country.key}
-                                    value={country.key}
+                                    key={country}
+                                    value={country}
                                     className="text-black"
                                 >
-                                    {country.value}
+                                    {country}
                                 </SelectItem>
                             ))}
                         </Select>
@@ -289,13 +390,13 @@ function SalaryPredictor() {
                                 setEducation(Object.entries(keys)[0][1])
                             }
                         >
-                            {educationLevels.map((level) => (
+                            {EDUCATION_LEVELS.map((level) => (
                                 <SelectItem
-                                    key={level.key}
-                                    value={level.key}
+                                    key={level}
+                                    value={level}
                                     className="text-black"
                                 >
-                                    {level.value}
+                                    {level}
                                 </SelectItem>
                             ))}
                         </Select>
