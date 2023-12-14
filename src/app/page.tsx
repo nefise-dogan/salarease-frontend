@@ -104,7 +104,7 @@ function Home() {
                             <br />
                         </p>
                         <a
-                            className="mt-4 text-blue-500 self-end"
+                            className="mt-4 self-end text-blue-500"
                             href="https://emt.gartnerweb.com/ngw/globalassets/en/human-resources/documents/should_machines_make_pay_decisions.pdf"
                             target="_blank"
                         >
@@ -117,21 +117,21 @@ function Home() {
                 <div className="flex max-w-4xl flex-row-reverse items-center gap-8 justify-self-start rounded-lg p-6 shadow-lg">
                     <div className="align-center flex w-40 flex-col">
                         <Image
-                            src="/avatar-female.png"
-                            alt="Avatar Female"
+                            src="/avatar-male.png"
+                            alt="Avatar Male"
                             isBlurred
                         />
                         <p className="mt-4 text-center text-sm">
-                            <span className="font-bold">Aigul Isataeva</span>
-                            <br /> HR manager
+                            <span className="font-bold">Oğuzhan Çevik</span>
+                            <br /> Junior Software Engineer
                         </p>
                     </div>
                     <p className="flex-1 text-center font-light">
-                        As an HR manager, SalarEase is a game-changer for me. It
-                        provides precise salary benchmarks, helping me make fair
-                        and competitive offers quickly. Its intuitive design
-                        simplifies complex salary data, letting me focus on
-                        recruiting the best talent.
+                        Expressed the need for tools that provide accurate and
+                        up-to-date salary estimation and assessment. Also
+                        mentioned that a Decision Support System (DSS) with
+                        reliable data could be valuable for recent graduates to
+                        measure their salary expectations.
                     </p>
                 </div>
             </div>
@@ -139,22 +139,39 @@ function Home() {
                 <div className="flex max-w-4xl items-center gap-8 justify-self-start rounded-lg p-6 shadow-lg">
                     <div className="align-center flex w-40 flex-col">
                         <Image
+                            src="/avatar-female.png"
+                            alt="Avatar Female"
+                            isBlurred
+                        />
+                        <p className="mt-4 text-center text-sm">
+                            <span className="font-bold">Aigul Isataeva</span>
+                            <br /> Human Resource Manager
+                        </p>
+                    </div>
+                    <p className="flex-1 text-center font-light">
+                        The candidates hesitate to share their expectations
+                        because if they want a higher salary than the company’s
+                        offer, they think that the company will not hire them.
+                    </p>
+                </div>
+            </div>
+            <div className="mt-12 self-end">
+                <div className="flex max-w-4xl flex-row-reverse items-center gap-8 justify-self-start rounded-lg p-6 shadow-lg">
+                    <div className="align-center flex w-40 flex-col">
+                        <Image
                             src="/avatar-male.png"
                             alt="Avatar Male"
                             isBlurred
                         />
                         <p className="mt-4 text-center text-sm">
-                            <span className="font-bold">Oğuzhan Çevik</span>
-                            <br /> Computer Engineering New Grad
+                            <span className="font-bold">Enes Koşar</span>
+                            <br /> Computer Science Graduate
                         </p>
                     </div>
                     <p className="flex-1 text-center font-light">
-                        Graduating in computer engineering, I was unsure about
-                        salary expectations in tech. SalarEase was a
-                        game-changer, offering clear, tailored salary insights
-                        based on my profile and the job market. It boosted my
-                        confidence in negotiations and made evaluating job
-                        offers much simpler!
+                        Computer Science Graduate with more than 10 years of
+                        experience in deep learning - “DSS model can create a
+                        good contribution to be more fair and objective.
                     </p>
                 </div>
             </div>
