@@ -11,6 +11,7 @@ import {
     Image,
 } from "@nextui-org/react";
 import { calculateSalary } from "../../utils/calculate-salary";
+import Link from "next/link";
 
 enum Profile {
     JobSeeker = "jobSeeker",
@@ -129,7 +130,7 @@ const EDUCATION_LEVELS = [
 const GENDERS = ["Male", "Female", "Other"];
 
 function SalaryPredictor() {
-    const [stepIndex, setStepIndex] = useState(0);
+    const [stepIndex, setStepIndex] = useState(2);
     const [selectedProfile, setSelectedProfile] = useState<Profile>(
         Profile.JobSeeker,
     );
@@ -485,12 +486,32 @@ function SalaryPredictor() {
                             />
                         </div>
                         <ol className="mt-12 rounded-lg p-6 shadow-lg">
-                            <li className="font-light">•<strong>Title:</strong> {title}</li>
-                            <li className="font-light mt-6">•<strong>Experience:</strong> {experience} years</li>
-                            <li className="font-light mt-6">•<strong>Gender:</strong> {gender}</li>
-                            <li className="font-light mt-6">•<strong>Country:</strong> {country}</li>
-                            <li className="font-light mt-6">•<strong>Education Level:</strong> {education}</li>
+                            <li className="font-light">
+                                •<strong>Title:</strong> {title}
+                            </li>
+                            <li className="mt-6 font-light">
+                                •<strong>Experience:</strong> {experience} years
+                            </li>
+                            <li className="mt-6 font-light">
+                                •<strong>Gender:</strong> {gender}
+                            </li>
+                            <li className="mt-6 font-light">
+                                •<strong>Country:</strong> {country}
+                            </li>
+                            <li className="mt-6 font-light">
+                                •<strong>Education Level:</strong> {education}
+                            </li>
                         </ol>
+                        <p className="mt-6 text-small font-light">
+                            *2017 to 2023 inflation rate is used as{" "}
+                            <Link
+                                className="text-blue font-bold"
+                                href="https://smartasset.com/investing/inflation-calculator"
+                                target="_blank"
+                            >
+                                %23.97
+                            </Link>
+                        </p>
                     </div>
                 </div>
             </>
