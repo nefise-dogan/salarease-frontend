@@ -29,7 +29,7 @@ function RootLayout({ children }: Props) {
                         </main>
                         <div className="bg-red-50 p-4 shadow-md">
                             <p className="text-center text-sm font-extralight text-red-900">
-                                SalaEase - 2023
+                                SalarEase - 2023
                             </p>
                         </div>
                     </div>
