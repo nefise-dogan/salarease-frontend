@@ -130,7 +130,7 @@ const EDUCATION_LEVELS = [
 const GENDERS = ["Male", "Female", "Other"];
 
 function SalaryPredictor() {
-    const [stepIndex, setStepIndex] = useState(2);
+    const [stepIndex, setStepIndex] = useState(0);
     const [selectedProfile, setSelectedProfile] = useState<Profile>(
         Profile.JobSeeker,
     );
