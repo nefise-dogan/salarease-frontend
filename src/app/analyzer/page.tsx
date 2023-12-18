@@ -4,16 +4,15 @@ function Analyzer() {
             <h1 className="self-center text-center text-4xl font-extralight leading-snug text-black">
                 Analyze the salary trends
             </h1>
-            <p className="mt-8">
-                Here is our analyzer demo with PowerBI. Contact us for more
-                information.
-            </p>
-            <video className="mt-8" controls width="80%">
-                <source src="/demo.mp4" type="video/mp4" />
-            </video>
-            <p className="mt-6 text-small font-light">
-                *PowerBI is not directly embedded here due to license issues
-            </p>
+            <div className="mt-6">
+                <iframe
+                    title="Salarease"
+                    width="1140"
+                    height="541.25"
+                    src="https://app.powerbi.com/reportEmbed?reportId=4f1a6c9f-ffb9-4fe1-a90d-7fa0d78a4601&autoAuth=true&ctid=d7db1280-2d5b-498f-acb1-5d399b111f7f"
+                    allowFullScreen={true}
+                ></iframe>
+            </div>                
         </div>
     );
 }
