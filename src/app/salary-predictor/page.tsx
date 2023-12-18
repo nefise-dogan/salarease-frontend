@@ -354,7 +354,7 @@ function SalaryPredictor() {
                             className="max-w-xs text-black"
                             color="secondary"
                             label="Country"
-                            placeholder="Select the country"
+                            placeholder="Select the company country"
                             size="lg"
                             isInvalid={country === undefined}
                             isRequired
@@ -434,7 +434,7 @@ function SalaryPredictor() {
                     <div className="flex flex-col">
                         <div>
                             <h1 className="text-center text-3xl font-extralight leading-snug text-black">
-                                Salary range:
+                                Salary range (yearly base):
                             </h1>
                             <p className="mt-8 text-3xl">
                                 {from}$ - {to}$
@@ -496,7 +496,7 @@ function SalaryPredictor() {
                                 •<strong>Gender:</strong> {gender}
                             </li>
                             <li className="mt-6 font-light">
-                                •<strong>Country:</strong> {country}
+                                •<strong>Company Country:</strong> {country}
                             </li>
                             <li className="mt-6 font-light">
                                 •<strong>Education Level:</strong> {education}
@@ -509,7 +509,7 @@ function SalaryPredictor() {
                                 href="https://smartasset.com/investing/inflation-calculator"
                                 target="_blank"
                             >
-                                %23.97
+                                23.97%
                             </Link>
                         </p>
                     </div>
